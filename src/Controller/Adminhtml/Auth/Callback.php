@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Renttek\KeycloakAdmin\Controller\Adminhtml\Auth;
 
+use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Message\ManagerInterface;
 use Renttek\KeycloakAdmin\Model\KeycloakProviderFactory;
 use Renttek\KeycloakAdmin\Model\Session;
+use Stringable;
 use Throwable;
 
 class Callback implements HttpGetActionInterface
@@ -17,6 +21,9 @@ class Callback implements HttpGetActionInterface
         private readonly KeycloakProviderFactory $providerFactory,
         private readonly RequestInterface $request,
         private readonly Session $session,
+        private readonly UrlInterface $url,
+        private readonly ManagerInterface $messageManager,
+        private readonly RedirectFactory $redirectFactory,
     ) {
     }
 
@@ -26,13 +33,13 @@ class Callback implements HttpGetActionInterface
 
         $code = $this->request->getParam('code');
         if ($code === null) {
-            dd('NO CODE');
+            return $this->redirectWithErrorMessage('Required parameter "code" was missing');
         }
 
         $sessionState = $this->session->getState();
         $requestState = $this->request->getParam('state');
         if ($sessionState === null || $sessionState !== $requestState) {
-            dd('STATE IS FUCKED');
+            return $this->redirectWithErrorMessage('Invalid state');
         }
 
         try {
@@ -40,16 +47,27 @@ class Callback implements HttpGetActionInterface
                 'code' => $code
             ]);
         } catch (Throwable $t) {
-            dd('FUCK', __LINE__, $t);
+            return $this->redirectWithErrorMessage('Failed to get access token: ' . $t->getMessage());
         }
 
         try {
             $user = $provider->getResourceOwner($token);
             dump($user);
         } catch (Throwable $t) {
-            dd('FUCK', __LINE__, $t);
+            return $this->redirectWithErrorMessage('Failed to get resource owner: ' . $t->getMessage());
         }
 
+        // TODO: find user by email ($user->getEmail())
         dd(__LINE__);
+    }
+
+    private function redirectWithErrorMessage(string|Stringable $message): Redirect
+    {
+        $this->messageManager->addErrorMessage((string)$message);
+        $url = $this->url->getUrl('admin');;
+
+        return $this->redirectFactory
+            ->create()
+            ->setUrl($url);
     }
 }
