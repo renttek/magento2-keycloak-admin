@@ -2,6 +2,7 @@
     "name": "renttek/magento2-keycloak-admin",
     "license": "MIT",
     "type": "magento2-module",
+    "description": "Magento 2 backend login using keycloak",
     "authors": [
         {
             "name": "Julian Nuß",
