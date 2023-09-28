@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Renttek\KeycloakAdmin\Controller\Adminhtml\Auth;
 
+use Magento\Backend\Model\Auth\StorageInterface;
+use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
@@ -16,11 +18,19 @@ class Index implements HttpGetActionInterface
         private readonly KeycloakProviderFactory $providerFactory,
         private readonly RedirectFactory $redirectFactory,
         private readonly Session $session,
+        private readonly StorageInterface $auth,
+        private readonly UrlInterface $url,
     ) {
     }
 
     public function execute(): Redirect
     {
+        if ($this->auth->isLoggedIn()) {
+            return $this->redirectFactory
+                ->create()
+                ->setPath($this->url->getStartupPageUrl());
+        }
+
         $keycloakProvider = $this->providerFactory->create();
         $authorizationUrl = $keycloakProvider->getAuthorizationUrl();
 

@@ -10,4 +10,14 @@
             <argument name="storage" xsi:type="object">renttekKeycloakAdminSession</argument>
         </arguments>
     </type>
+    <type name="Renttek\KeycloakAdmin\Controller\Adminhtml\Auth\Index">
+        <arguments>
+            <argument name="session" xsi:type="object">Renttek\KeycloakAdmin\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Renttek\KeycloakAdmin\Controller\Adminhtml\Auth\Callback">
+        <arguments>
+            <argument name="session" xsi:type="object">Renttek\KeycloakAdmin\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>

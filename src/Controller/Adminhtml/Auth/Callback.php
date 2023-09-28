@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Renttek\KeycloakAdmin\Controller\Adminhtml\Auth;
 
+use Magento\Backend\Model\Auth\StorageInterface;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Renttek\KeycloakAdmin\Model\Auth;
 use Renttek\KeycloakAdmin\Model\KeycloakProviderFactory;
 use Renttek\KeycloakAdmin\Model\Session;
+use Renttek\KeycloakAdmin\Service\AdminUser;
 use Stringable;
 use Throwable;
 
@@ -24,11 +28,21 @@ class Callback implements HttpGetActionInterface
         private readonly UrlInterface $url,
         private readonly ManagerInterface $messageManager,
         private readonly RedirectFactory $redirectFactory,
+        private readonly StorageInterface $authStorage,
+        private readonly AdminUser $adminUser,
+        private readonly Auth $auth,
+        private readonly DateTime $dateTime,
     ) {
     }
 
     public function execute(): Redirect
     {
+        if ($this->authStorage->isLoggedIn()) {
+            return $this->redirectFactory
+                ->create()
+                ->setPath($this->url->getStartupPageUrl());
+        }
+
         $provider = $this->providerFactory->create();
 
         $code = $this->request->getParam('code');
@@ -52,13 +66,25 @@ class Callback implements HttpGetActionInterface
 
         try {
             $user = $provider->getResourceOwner($token);
-            dump($user);
         } catch (Throwable $t) {
             return $this->redirectWithErrorMessage('Failed to get resource owner: ' . $t->getMessage());
         }
 
-        // TODO: find user by email ($user->getEmail())
-        dd(__LINE__);
+        try {
+            $adminUser = $this->adminUser->getOrCreateUser($user);
+            $this->auth->loginByUsername($adminUser->getUserName());
+
+            $expirationTimestamp = $this->dateTime->gmtTimestamp() + $token->getExpires();
+            $this->session->setAccessToken($token->getToken());
+            $this->session->setRefreshToken($token->getRefreshToken());
+            $this->session->setTokenExpiration($expirationTimestamp);
+        } catch (Throwable $t) {
+            dd($t);
+        }
+
+        return $this->redirectFactory
+            ->create()
+            ->setPath($this->url->getStartupPageUrl());
     }
 
     private function redirectWithErrorMessage(string|Stringable $message): Redirect
