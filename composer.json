@@ -1,0 +1,53 @@
+{
+    "name": "renttek/magento2-keycloak-admin",
+    "license": "MIT",
+    "type": "magento2-module",
+    "authors": [
+        {
+            "name": "Julian Nuß",
+            "email": "juliann@renttek.de"
+        }
+    ],
+    "require": {
+        "league/oauth2-client": "^2.7",
+        "magento/framework": "^103.0",
+        "magento/module-backend": "^102.0",
+        "stevenmaguire/oauth2-keycloak": "^5.0"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.34",
+        "symfony/var-dumper": "^6.3",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/extension-installer": "^1.3",
+        "symplify/easy-coding-standard": "^12.0",
+        "vimeo/psalm": "^5.15",
+        "renttek/magento2-psalm": "^1.1",
+        "bitexpert/phpstan-magento": "^0.30.1"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://mirror.mage-os.org/",
+            "only": [
+                "magento/*"
+            ]
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Renttek\\KeycloakAdmin\\": "src/"
+        },
+        "files": [
+            "registration.php"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "magento/composer-dependency-version-audit-plugin": false,
+            "phpstan/extension-installer": true
+        }
+    }
+}
