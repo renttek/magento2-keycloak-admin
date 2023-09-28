@@ -20,4 +20,9 @@
             <argument name="session" xsi:type="object">Renttek\KeycloakAdmin\Model\Session\Proxy</argument>
         </arguments>
     </type>
+    <type name="Renttek\KeycloakAdmin\Observer\RefreshKeycloakToken">
+        <arguments>
+            <argument name="session" xsi:type="object">Renttek\KeycloakAdmin\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>

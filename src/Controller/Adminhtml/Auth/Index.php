@@ -34,6 +34,7 @@ class Index implements HttpGetActionInterface
         $keycloakProvider = $this->providerFactory->create();
         $authorizationUrl = $keycloakProvider->getAuthorizationUrl();
 
+        $this->session->clear();
         $this->session->setState($keycloakProvider->getState());
 
         return $this->redirectFactory
