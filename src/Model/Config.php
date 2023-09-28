@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Renttek\KeycloakAdmin\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 class Config
 {
@@ -16,36 +17,34 @@ class Config
 
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
+        private readonly EncryptorInterface $encryptor,
     ) {
     }
 
     public function getKeycloakAuthServerUrl(): string
     {
-        return 'http://keycloak:8080/';
         return $this->scopeConfig->getValue(self::KEYCLOAK_AUTH_SERVER_URL);
     }
 
     public function getKeycloakVersion(): string
     {
-        return '22.0.0';
         return $this->scopeConfig->getValue(self::KEYCLOAK_VERSION);
     }
 
     public function getKeycloakRealm(): string
     {
-        return 'magento';
         return $this->scopeConfig->getValue(self::KEYCLOAK_REALM);
     }
 
     public function getKeycloakClientId(): string
     {
-        return 'test-2';
         return $this->scopeConfig->getValue(self::KEYCLOAK_CLIENT_ID);
     }
 
     public function getKeycloakClientSecret(): string
     {
-        return 'hAxp426iqgRSc5An9diflKDxdLv1aWh7';
-        return $this->scopeConfig->getValue(self::KEYCLOAK_CLIENT_SECRET);
+        return $this->encryptor->decrypt(
+            $this->scopeConfig->getValue(self::KEYCLOAK_CLIENT_SECRET)
+        );
     }
 }
