@@ -10,13 +10,16 @@
                 <field id="auth_server_url" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Keycloak Auth Url</label>
                 </field>
-                <field id="realm" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="version" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Keycloak Version</label>
+                </field>
+                <field id="realm" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Realm</label>
                 </field>
-                <field id="client_id" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="client_id" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Client ID</label>
                 </field>
-                <field id="client_secret" translate="label" type="obscure" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="client_secret" translate="label" type="obscure" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Client Secret</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>

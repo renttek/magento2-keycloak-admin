@@ -25,7 +25,7 @@ class KeycloakProviderFactory
             'clientId'              => $this->config->getKeycloakClientId(),
             'clientSecret'          => $this->config->getKeycloakClientSecret(),
             'redirectUri'           => $this->url->getUrl('renttek_keycloak/auth/callback'),
-            'version'               => '22.0.0',
+            'version'               => $this->config->getKeycloakVersion(),
         ]);
     }
 }
