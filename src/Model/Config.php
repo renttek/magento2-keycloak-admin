@@ -9,6 +9,7 @@ use Magento\Framework\Encryption\EncryptorInterface;
 
 class Config
 {
+    private const KEYCLOAK_ENABLED         = 'renttek_keycloak/keycloak/enabled';
     private const KEYCLOAK_AUTH_SERVER_URL = 'renttek_keycloak/keycloak/auth_server_url';
     private const KEYCLOAK_REALM           = 'renttek_keycloak/keycloak/realm';
     private const KEYCLOAK_CLIENT_ID       = 'renttek_keycloak/keycloak/client_id';
@@ -19,6 +20,11 @@ class Config
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly EncryptorInterface $encryptor,
     ) {
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(self::KEYCLOAK_ENABLED);
     }
 
     public function getKeycloakAuthServerUrl(): string

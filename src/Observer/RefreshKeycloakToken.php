@@ -9,6 +9,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Renttek\KeycloakAdmin\Model\Auth;
+use Renttek\KeycloakAdmin\Model\Config;
 use Renttek\KeycloakAdmin\Model\KeycloakProviderFactory;
 use Renttek\KeycloakAdmin\Model\Session;
 
@@ -20,16 +21,20 @@ class RefreshKeycloakToken implements ObserverInterface
         private readonly KeycloakProviderFactory $keycloakProviderFactory,
         private readonly Auth $auth,
         private readonly ManagerInterface $messageManager,
+        private readonly Config $config,
     ) {
     }
 
-    public function execute(Observer $observer)
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function execute(Observer $observer): void
     {
-        if ($this->session->getAccessToken() === null || $this->session->getRefreshToken() === null) {
+        if (!$this->config->isEnabled() || $this->session->getRefreshToken() === null) {
             return;
         }
 
-        $refreshToken = $this->session->getRefreshToken();
+        $refreshToken        = $this->session->getRefreshToken();
         $expirationTimestamp = $this->session->getTokenExpiration();
 
         $provider = $this->keycloakProviderFactory->create();

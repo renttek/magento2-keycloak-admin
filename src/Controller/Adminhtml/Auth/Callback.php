@@ -13,6 +13,7 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Renttek\KeycloakAdmin\Model\Auth;
+use Renttek\KeycloakAdmin\Model\Config;
 use Renttek\KeycloakAdmin\Model\KeycloakProviderFactory;
 use Renttek\KeycloakAdmin\Model\Session;
 use Renttek\KeycloakAdmin\Service\AdminUser;
@@ -32,12 +33,13 @@ class Callback implements HttpGetActionInterface
         private readonly AdminUser $adminUser,
         private readonly Auth $auth,
         private readonly DateTime $dateTime,
+        private readonly Config $config,
     ) {
     }
 
     public function execute(): Redirect
     {
-        if ($this->authStorage->isLoggedIn()) {
+        if (!$this->config->isEnabled() || $this->authStorage->isLoggedIn()) {
             return $this->redirectFactory
                 ->create()
                 ->setPath($this->url->getStartupPageUrl());

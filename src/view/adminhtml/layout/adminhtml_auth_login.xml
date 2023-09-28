@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="form.buttons">
+            <block class="Magento\Backend\Block\Template"
+                   name="adminhtml_auth_login_buttons_keycloak"
+                   template="Renttek_KeycloakAdmin::keycloak-button.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Renttek\KeycloakAdmin\ViewModel\Adminhtml\Keycloak</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
