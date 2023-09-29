@@ -28,6 +28,32 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
             </group>
+            <group id="user" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label><![CDATA[User Login & Registration]]></label>
+                <field id="roles_allowed_for_login" translate="label" type="textarea" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Keycloak Realm Roles allowed for login</label>
+                    <comment>One role per line, case-sensitive</comment>
+                </field>
+                <field id="enable_user_creation" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Automatically create new users</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="default_locale" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default Locale</label>
+                    <source_model>Magento\Config\Model\Config\Source\Locale</source_model>
+                </field>
+                <field id="user_attribute_mapping" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>User Attribute Mapping</label>
+                    <frontend_model>Renttek\KeycloakAdmin\Block\Adminhtml\Form\Field\UserAttributeMapping</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+                <field id="realm_role_to_backend_role_mapping" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Role Mapping</label>
+                    <comment>Keycloak Realm Roles to Magento Backend Roles Mapping</comment>
+                    <frontend_model>Renttek\KeycloakAdmin\Block\Adminhtml\Form\Field\RealmRoleBackendRoleMapping</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>

@@ -81,7 +81,7 @@ class Callback implements HttpGetActionInterface
             $this->session->setRefreshToken($token->getRefreshToken());
             $this->session->setTokenExpiration($expirationTimestamp);
         } catch (Throwable $t) {
-            dd($t);
+            $this->redirectWithErrorMessage($t->getMessage());
         }
 
         return $this->redirectFactory

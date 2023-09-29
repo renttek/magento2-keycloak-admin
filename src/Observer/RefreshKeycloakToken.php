@@ -16,7 +16,7 @@ use Renttek\KeycloakAdmin\Model\Session;
 class RefreshKeycloakToken implements ObserverInterface
 {
     public function __construct(
-        private readonly Session $session, // TODO proxy-fy
+        private readonly Session $session,
         private readonly DateTime $dateTime,
         private readonly KeycloakProviderFactory $keycloakProviderFactory,
         private readonly Auth $auth,

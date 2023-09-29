@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <renttek_keycloak>
+            <user>
+                <default_locale>en_US</default_locale>
+                <user_attribute_mapping>
+                    <username>
+                        <keycloak_attribute>preferred_username</keycloak_attribute>
+                        <magento_attribute>user_name</magento_attribute>
+                    </username>
+                    <firstname>
+                        <keycloak_attribute>given_name</keycloak_attribute>
+                        <magento_attribute>first_name</magento_attribute>
+                    </firstname>
+                    <lastname>
+                        <keycloak_attribute>family_name</keycloak_attribute>
+                        <magento_attribute>last_name</magento_attribute>
+                    </lastname>
+                    <locale>
+                        <keycloak_attribute>locale</keycloak_attribute>
+                        <magento_attribute>interface_locale</magento_attribute>
+                    </locale>
+                </user_attribute_mapping>
+                <realm_role_to_backend_role_mapping>
+                    <default>
+                        <keycloak_role>Shop Admin</keycloak_role>
+                        <magento_role>1</magento_role>
+                    </default>
+                </realm_role_to_backend_role_mapping>
+            </user>
+        </renttek_keycloak>
+        <system>
+            <backup>
+                <functionality_enabled>0</functionality_enabled>
+            </backup>
+        </system>
+    </default>
+</config>
