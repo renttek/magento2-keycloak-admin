@@ -12,6 +12,7 @@ use Renttek\KeycloakAdmin\Model\Auth;
 use Renttek\KeycloakAdmin\Model\Config;
 use Renttek\KeycloakAdmin\Model\KeycloakProviderFactory;
 use Renttek\KeycloakAdmin\Model\Session;
+use Throwable;
 
 class RefreshKeycloakToken implements ObserverInterface
 {
@@ -54,6 +55,7 @@ class RefreshKeycloakToken implements ObserverInterface
             $this->session->clear();
             $this->messageManager->addErrorMessage('Could not refresh keycloak token');
             $this->auth->logout();
+            return;
         }
 
         $expirationTimestamp = $this->dateTime->gmtTimestamp() + $token->getExpires();
