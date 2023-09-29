@@ -35,11 +35,16 @@ class AdminUser
     public function getOrCreateUser(KeycloakResourceOwner $keycloakResourceOwner): User
     {
         [
-            'email'        => $email,
-            'realm_access' => [
+            'email'          => $email,
+            'email_verified' => $emailVerified,
+            'realm_access'   => [
                 'roles' => $roles,
             ],
         ] = $keycloakResourceOwner->toArray();
+
+        if (!$emailVerified) {
+            throw new RuntimeException('E-Mail address is not verified');
+        }
 
         $allowedRoles  = $this->config->getUserRolesAllowedForLogin();
         $matchingRoles = array_intersect($roles, $allowedRoles);
@@ -133,6 +138,7 @@ class AdminUser
             UserAttributeMapping::MAGENTO_ATTRIBUTE,
         );
     }
+
     private function getRoleMapping(): array
     {
         return array_column(
